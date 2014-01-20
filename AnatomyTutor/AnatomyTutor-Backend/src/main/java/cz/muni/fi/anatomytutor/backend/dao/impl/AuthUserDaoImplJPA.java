@@ -25,6 +25,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 /**
  * JPA/Hibernate DAO implementation - for operations on the persistence layer on
@@ -32,6 +33,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Jan Kucera
  */
+@Repository
 public class AuthUserDaoImplJPA implements AuthUserDao {
 
     final static Logger log = LoggerFactory.getLogger(AuthUserDaoImplJPA.class);
@@ -46,6 +48,7 @@ public class AuthUserDaoImplJPA implements AuthUserDao {
         this.em = em;
     }
 
+    @Override
     public AuthUser getByEmail(String email) throws NoResultException {
         if (email == null) {
             throw new IllegalArgumentException("Invalid email: null");
@@ -58,6 +61,7 @@ public class AuthUserDaoImplJPA implements AuthUserDao {
                 + "WHERE tbl.email = :givenEmail", AuthUser.class).setParameter("givenEmail", email).getSingleResult();
     }
 
+    @Override
     public boolean isEmailAlreadyUsed(String email) {
         TypedQuery<Long> query;
         AuthUser returnedUser;
@@ -73,6 +77,7 @@ public class AuthUserDaoImplJPA implements AuthUserDao {
         throw new RuntimeException("There are more than one identical email in the database.");
     }
 
+    @Override
     public Long create(AuthUser user) {
         if (user == null) {
             throw new IllegalArgumentException("Invalid user: null");
@@ -81,6 +86,7 @@ public class AuthUserDaoImplJPA implements AuthUserDao {
         return createdUser.getId();
     }
 
+    @Override
     public AuthUser get(Long id) throws NoResultException {
         if (id == null) {
             throw new IllegalArgumentException("Invalid id: null");
@@ -93,6 +99,7 @@ public class AuthUserDaoImplJPA implements AuthUserDao {
                 + "WHERE tbl.id = :givenId", AuthUser.class).setParameter("givenId", id).getSingleResult();
     }
 
+    @Override
     public void update(AuthUser user) {
         if (user == null || user.getId() == null) {
             throw new IllegalArgumentException("Invalid user: null or with no id.");
@@ -103,6 +110,7 @@ public class AuthUserDaoImplJPA implements AuthUserDao {
         em.merge(user);
     }
 
+    @Override
     public void remove(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("Invalid id: null");

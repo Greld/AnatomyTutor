@@ -1,0 +1,1 @@
+INSERT INTO AUTHUSER (EMAIL, "NAME") VALUES ('greld@centrum.cz', 'Greld')

@@ -27,23 +27,12 @@ import cz.muni.fi.anatomytutor.api.dto.AuthUserDto;
 public interface UserService {
 
     /**
-     * Verify if user with given username and password exists.
-     *
-     * @param username
-     * @param password
-     * @return User if user with given username and password exist, null
-     * otherwise
-     */
-    AuthUserDto login(String username, String password);
-
-    /**
      * Create new user.
      *
      * @param user
-     * @param password
      * @return User id if registration was successfull, null otherwise
      */
-    Long register(AuthUserDto user, String password);
+    Long register(AuthUserDto user);
 
     /**
      * Update user
