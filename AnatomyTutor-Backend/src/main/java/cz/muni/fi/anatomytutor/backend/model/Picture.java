@@ -17,27 +17,31 @@
  */
 package cz.muni.fi.anatomytutor.backend.model;
 
+import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 /**
  *
  * @author Jan Kucera
  */
 @Entity
-public class Picture {
+public class Picture implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition = "serial")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(columnDefinition = "VARCHAR(255)")
+    private String name;
+    @Column(columnDefinition = "text")
+    private String svg;
     @ManyToOne
-    private Term term;
-    @OneToOne
-    private TranslatableText description;
+    private Category category;
 
     public Long getId() {
         return id;
@@ -47,20 +51,28 @@ public class Picture {
         this.id = id;
     }
 
-    public Term getTerm() {
-        return term;
+    public String getName() {
+        return name;
     }
 
-    public void setTerm(Term term) {
-        this.term = term;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public TranslatableText getDescription() {
-        return description;
+    public String getSvg() {
+        return svg;
     }
 
-    public void setDescription(TranslatableText description) {
-        this.description = description;
+    public void setSvg(String svg) {
+        this.svg = svg;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     @Override
@@ -87,7 +99,7 @@ public class Picture {
 
     @Override
     public String toString() {
-        return "Picture{" + "term=" + term + ", name=" + description + '}';
+        return "Picture{" + "id=" + id + ", name=" + name + ", category=" + category + '}';
     }
 
 }

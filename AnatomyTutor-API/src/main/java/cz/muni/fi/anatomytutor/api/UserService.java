@@ -18,6 +18,7 @@
 package cz.muni.fi.anatomytutor.api;
 
 import cz.muni.fi.anatomytutor.api.dto.AuthUserDto;
+import cz.muni.fi.anatomytutor.api.dto.SocialNetwork;
 
 /**
  * User service interface for operations on User DTO.
@@ -25,14 +26,6 @@ import cz.muni.fi.anatomytutor.api.dto.AuthUserDto;
  * @author Jan Kucera
  */
 public interface UserService {
-
-    /**
-     * Create new user.
-     *
-     * @param user
-     * @return User id if registration was successfull, null otherwise
-     */
-    Long register(AuthUserDto user);
 
     /**
      * Update user
@@ -56,4 +49,20 @@ public interface UserService {
      */
     AuthUserDto getById(Long id);
 
+    /**
+     * Find user by email
+     *
+     * @param email
+     * @return user with given email.
+     */
+    AuthUserDto getByEmail(String email);
+
+    /**
+     * Find user by id in appropriate social network
+     *
+     * @param socialNetwork social network to which user is log in
+     * @param idInSocialNetwork user id in social network
+     * @return user
+     */
+    AuthUserDto getUserByIdInSocialNetwork(SocialNetwork socialNetwork, String idInSocialNetwork);
 }

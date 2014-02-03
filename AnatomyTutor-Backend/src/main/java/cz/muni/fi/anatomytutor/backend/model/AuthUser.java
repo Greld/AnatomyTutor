@@ -17,9 +17,12 @@
  */
 package cz.muni.fi.anatomytutor.backend.model;
 
+import cz.muni.fi.anatomytutor.api.dto.SocialNetwork;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,12 +35,17 @@ import javax.persistence.Id;
 public class AuthUser implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition = "serial")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(columnDefinition = "VARCHAR(100)")
     private String name;
     @Column(columnDefinition = "VARCHAR(255)")
     private String email;
+    @Enumerated(EnumType.STRING)
+    private SocialNetwork socialNetwork;
+    private String idInSocialNetwork;
+    private String accessToken;
     /*
      @OneToMany(mappedBy = "author", cascade = {CascadeType.REMOVE})
      private List<Answer> answers;
@@ -66,6 +74,31 @@ public class AuthUser implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public SocialNetwork getSocialNetwork() {
+        return socialNetwork;
+    }
+
+    public void setSocialNetwork(SocialNetwork socialNetwork) {
+        this.socialNetwork = socialNetwork;
+    }
+
+    public String getIdInSocialNetwork() {
+        return idInSocialNetwork;
+    }
+
+    public void setIdInSocialNetwork(String idInSocialNetwork) {
+        this.idInSocialNetwork = idInSocialNetwork;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
     /*
      public List<Answer> getAnswers() {
      return answers;
@@ -75,7 +108,6 @@ public class AuthUser implements Serializable {
      this.answers = answers;
      }
      */
-
     @Override
     public int hashCode() {
         int hash = 3;
@@ -100,7 +132,7 @@ public class AuthUser implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" + "name=" + name + ", email=" + email + '}';// + ", answers=" + answers + '}';
+        return "AuthUser{" + "id=" + id + ", name=" + name + ", email=" + email + ", socialNetwork=" + socialNetwork + ", idInSocialNetwork=" + idInSocialNetwork + ", accessToken=" + accessToken + '}';
     }
 
 }

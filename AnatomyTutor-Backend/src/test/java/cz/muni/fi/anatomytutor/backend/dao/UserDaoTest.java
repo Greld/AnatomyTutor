@@ -78,9 +78,9 @@ public class UserDaoTest {
         user.setEmail("neco@email.com");
 
         em.getTransaction().begin();
-        Long userId = userDao.create(user);
+        user = userDao.create(user);
         em.getTransaction().commit();
-        assertFalse("User was not created.", userId == null);
+        assertFalse("User was not created.", user.getId() == null);
 
         try {
             userDao.create(null);

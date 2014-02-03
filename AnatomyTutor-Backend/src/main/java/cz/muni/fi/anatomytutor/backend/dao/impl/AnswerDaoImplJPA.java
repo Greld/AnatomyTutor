@@ -23,6 +23,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 /**
  * JPA/Hibernate DAO implementation - for operations on the persistence layer on
@@ -30,7 +31,8 @@ import org.slf4j.LoggerFactory;
  *
  * @author Jan Kucera
  */
-public class AnswerDaoImplJPA implements AnswerDao {
+@Repository
+public class AnswerDaoImplJPA extends GenericDaoImpl<Answer> implements AnswerDao {
 
     final static Logger log = LoggerFactory.getLogger(AnswerDaoImplJPA.class);
     // injected from Spring
@@ -38,51 +40,12 @@ public class AnswerDaoImplJPA implements AnswerDao {
     private EntityManager em;
 
     public AnswerDaoImplJPA() {
+        super(Answer.class);
     }
 
     public AnswerDaoImplJPA(EntityManager em) {
+        super(Answer.class);
         this.em = em;
-    }
-
-    public Long create(Answer answer) {
-        if (answer == null) {
-            throw new IllegalArgumentException("Invalid answer: null");
-        }
-        Answer createdAnswer = em.merge(answer);
-        return createdAnswer.getId();
-    }
-
-    public Answer get(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("Invalid id: null");
-        }
-        if (em.createQuery("SELECT tbl.id FROM Answer tbl WHERE tbl.id = "
-                + ":givenId", Long.class).setParameter("givenId", id).getResultList().size() < 1) {
-            throw new IllegalArgumentException("Invalid id: nonexistent");
-        }
-        return em.createQuery("SELECT tbl FROM Answer tbl "
-                + "WHERE tbl.id = :givenId", Answer.class).setParameter("givenId", id).getSingleResult();
-    }
-
-    public void update(Answer answer) {
-        if (answer == null || answer.getId() == null) {
-            throw new IllegalArgumentException("Invalid answer: null or with no id.");
-        } else if (em.createQuery("SELECT tbl.id FROM Answer tbl WHERE tbl.id = "
-                + ":givenId", Long.class).setParameter("givenId", answer.getId()).getResultList().size() < 1) {
-            throw new IllegalArgumentException("Invalid answer: nonexistent");
-        }
-        em.merge(answer);
-    }
-
-    public void remove(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("Invalid id: null");
-        }
-        Answer answer = em.find(Answer.class, id);
-        if (answer == null) {
-            log.error("Removing answer with id " + id + " is already not in DB.");
-        }
-        em.remove(answer);
     }
 
 }

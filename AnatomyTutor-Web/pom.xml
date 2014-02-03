@@ -39,26 +39,7 @@
             <version>1.0</version>
             <type>jar</type>
         </dependency>
-        <!--Jersey container servlet-->
-        <dependency>
-            <groupId>org.glassfish.jersey.containers</groupId>
-            <!-- if your container implements Servlet API older than 3.0, use "jersey-container-servlet-core"  -->
-            <artifactId>jersey-container-servlet</artifactId>
-            <version>2.4.1</version>
-        </dependency>
-        <!--Jersey Spring integration-->
-        <dependency>
-            <groupId>org.glassfish.jersey.ext</groupId>
-            <artifactId>jersey-spring3</artifactId>
-            <version>2.4.1</version>
-        </dependency>
 
-        <!--JSON provider-->
-        <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-moxy</artifactId>
-            <version>2.4.1</version>
-        </dependency>
         <!--Spring-->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -110,16 +91,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <dependency>
             <groupId>servlets.com</groupId>
             <artifactId>cos</artifactId>
             <version>05Nov2002</version>
-        </dependency>
-        <!-- Cross Domain -->
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-servlets</artifactId>
-            <version>7.0.0.RC2</version>
         </dependency>
     </dependencies>
 

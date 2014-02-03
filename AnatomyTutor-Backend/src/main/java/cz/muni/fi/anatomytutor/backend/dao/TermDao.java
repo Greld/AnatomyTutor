@@ -23,6 +23,6 @@ import cz.muni.fi.anatomytutor.backend.model.Term;
  *
  * @author Jan Kucera
  */
-public interface TermDao extends Dao<Term> {
+public interface TermDao extends GenericDao<Term> {
 
 }

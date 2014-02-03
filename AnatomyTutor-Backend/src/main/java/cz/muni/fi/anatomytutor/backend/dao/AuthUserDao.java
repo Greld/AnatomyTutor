@@ -17,6 +17,7 @@
  */
 package cz.muni.fi.anatomytutor.backend.dao;
 
+import cz.muni.fi.anatomytutor.api.dto.SocialNetwork;
 import cz.muni.fi.anatomytutor.backend.model.AuthUser;
 
 /**
@@ -24,7 +25,7 @@ import cz.muni.fi.anatomytutor.backend.model.AuthUser;
  *
  * @author Jan Kucera
  */
-public interface AuthUserDao extends Dao<AuthUser> {
+public interface AuthUserDao extends GenericDao<AuthUser> {
 
     /*
      * Finds user with given email.
@@ -42,4 +43,13 @@ public interface AuthUserDao extends Dao<AuthUser> {
      */
     boolean isEmailAlreadyUsed(String email);
 
+    /**
+     * Get user who has already log via this social network with this user id
+     * from social network
+     *
+     * @param socialNetwork
+     * @param idInSocialNetwork user id in the social network
+     * @return user linked to token for appropriate social network
+     */
+    AuthUser getUserByIdInSocialNetwork(SocialNetwork socialNetwork, String idInSocialNetwork);
 }

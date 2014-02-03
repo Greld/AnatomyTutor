@@ -23,6 +23,6 @@ import cz.muni.fi.anatomytutor.backend.model.Answer;
  *
  * @author Jan Kucera
  */
-public interface AnswerDao extends Dao<Answer> {
+public interface AnswerDao extends GenericDao<Answer> {
 
 }

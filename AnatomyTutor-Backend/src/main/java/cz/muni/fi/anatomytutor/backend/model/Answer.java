@@ -20,6 +20,7 @@ package cz.muni.fi.anatomytutor.backend.model;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,7 +35,8 @@ import javax.persistence.ManyToOne;
 public class Answer implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition = "serial")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Date answerDate;
     private Time answerTime;
@@ -42,9 +44,9 @@ public class Answer implements Serializable {
     @ManyToOne
     private AuthUser author;
     @ManyToOne
-    private Term questionArea;
+    private TermInPicture questionTerm;
     @ManyToOne
-    private Term answerArea;
+    private TermInPicture answerTerm;
 
     public Long getId() {
         return id;
@@ -86,20 +88,20 @@ public class Answer implements Serializable {
         this.author = author;
     }
 
-    public Term getQuestionArea() {
-        return questionArea;
+    public TermInPicture getQuestionTerm() {
+        return questionTerm;
     }
 
-    public void setQuestionArea(Term questionArea) {
-        this.questionArea = questionArea;
+    public void setQuestionTerm(TermInPicture questionTerm) {
+        this.questionTerm = questionTerm;
     }
 
-    public Term getAnswerArea() {
-        return answerArea;
+    public TermInPicture getAnswerTerm() {
+        return answerTerm;
     }
 
-    public void setAnswerArea(Term answerArea) {
-        this.answerArea = answerArea;
+    public void setAnswerTerm(TermInPicture answerTerm) {
+        this.answerTerm = answerTerm;
     }
 
     @Override
@@ -126,7 +128,7 @@ public class Answer implements Serializable {
 
     @Override
     public String toString() {
-        return "Answer{" + "answerDate=" + answerDate + ", answerTime=" + answerTime + ", duration=" + duration + ", author=" + author + ", questionArea=" + questionArea + ", answerArea=" + answerArea + '}';
+        return "Answer{" + "answerDate=" + answerDate + ", answerTime=" + answerTime + ", duration=" + duration + ", author=" + author + ", questionTerm=" + questionTerm + ", answerTerm=" + answerTerm + '}';
     }
 
 }

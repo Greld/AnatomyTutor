@@ -1,5 +1,6 @@
 package cz.muni.fi.anatomytutor.api.dto;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Objects;
  *
  * @author Jan Kucera
  */
-public class AuthUserDto {
+public class AuthUserDto implements Serializable {
 
     private Long id;
     private String name;

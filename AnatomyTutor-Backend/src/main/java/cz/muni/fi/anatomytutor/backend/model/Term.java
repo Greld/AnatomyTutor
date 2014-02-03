@@ -18,12 +18,11 @@
 package cz.muni.fi.anatomytutor.backend.model;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 /**
  *
@@ -33,14 +32,12 @@ import javax.persistence.OneToOne;
 public class Term implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition = "serial")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    private TranslatableText name;
-
-    @ManyToOne
-    private Term parentArea;
+    @Column(columnDefinition = "VARCHAR(255)")
+    private String name;
 
     public Long getId() {
         return id;
@@ -50,20 +47,12 @@ public class Term implements Serializable {
         this.id = id;
     }
 
-    public TranslatableText getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(TranslatableText name) {
+    public void setName(String name) {
         this.name = name;
-    }
-
-    public Term getParentArea() {
-        return parentArea;
-    }
-
-    public void setParentArea(Term parentArea) {
-        this.parentArea = parentArea;
     }
 
     @Override
@@ -90,7 +79,7 @@ public class Term implements Serializable {
 
     @Override
     public String toString() {
-        return "Area{" + "name=" + name + ", parentArea=" + parentArea + '}';
+        return "Term{" + "name=" + name + '}';
     }
 
 }

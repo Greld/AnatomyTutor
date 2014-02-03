@@ -23,6 +23,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 /**
  * JPA/Hibernate DAO implementation - for operations on the persistence layer on
@@ -30,59 +31,21 @@ import org.slf4j.LoggerFactory;
  *
  * @author Jan Kucera
  */
-public class TermDaoImplJPA implements TermDao {
+@Repository
+public class TermDaoImplJPA extends GenericDaoImpl<Term> implements TermDao {
 
     final static Logger log = LoggerFactory.getLogger(TermDaoImplJPA.class);
-    // injected from Spring
+
     @PersistenceContext
     private EntityManager em;
 
     public TermDaoImplJPA() {
+        super(Term.class);
     }
 
     public TermDaoImplJPA(EntityManager em) {
+        super(Term.class);
         this.em = em;
-    }
-
-    public Long create(Term area) {
-        if (area == null) {
-            throw new IllegalArgumentException("Invalid area: null");
-        }
-        Term createdArea = em.merge(area);
-        return createdArea.getId();
-    }
-
-    public Term get(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("Invalid id: null");
-        }
-        if (em.createQuery("SELECT tbl.id FROM Area tbl WHERE tbl.id = "
-                + ":givenId", Long.class).setParameter("givenId", id).getResultList().size() < 1) {
-            throw new IllegalArgumentException("Invalid id: nonexistent");
-        }
-        return em.createQuery("SELECT tbl FROM Area tbl "
-                + "WHERE tbl.id = :givenId", Term.class).setParameter("givenId", id).getSingleResult();
-    }
-
-    public void update(Term area) {
-        if (area == null || area.getId() == null) {
-            throw new IllegalArgumentException("Invalid area: null or with no id.");
-        } else if (em.createQuery("SELECT tbl.id FROM Area tbl WHERE tbl.id = "
-                + ":givenId", Long.class).setParameter("givenId", area.getId()).getResultList().size() < 1) {
-            throw new IllegalArgumentException("Invalid area: nonexistent");
-        }
-        em.merge(area);
-    }
-
-    public void remove(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("Invalid id: null");
-        }
-        Term area = em.find(Term.class, id);
-        if (area == null) {
-            log.error("Removing area with id " + id + " is already not in DB.");
-        }
-        em.remove(area);
     }
 
 }

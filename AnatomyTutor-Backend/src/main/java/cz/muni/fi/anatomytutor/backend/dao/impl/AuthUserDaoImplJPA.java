@@ -17,10 +17,10 @@
  */
 package cz.muni.fi.anatomytutor.backend.dao.impl;
 
+import cz.muni.fi.anatomytutor.api.dto.SocialNetwork;
 import cz.muni.fi.anatomytutor.backend.dao.AuthUserDao;
 import cz.muni.fi.anatomytutor.backend.model.AuthUser;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import org.slf4j.Logger;
@@ -34,28 +34,30 @@ import org.springframework.stereotype.Repository;
  * @author Jan Kucera
  */
 @Repository
-public class AuthUserDaoImplJPA implements AuthUserDao {
+public class AuthUserDaoImplJPA extends GenericDaoImpl<AuthUser> implements AuthUserDao {
 
     final static Logger log = LoggerFactory.getLogger(AuthUserDaoImplJPA.class);
-    // injected from Spring
+
     @PersistenceContext
     private EntityManager em;
 
     public AuthUserDaoImplJPA() {
+        super(AuthUser.class);
     }
 
     public AuthUserDaoImplJPA(EntityManager em) {
+        super(AuthUser.class);
         this.em = em;
     }
 
     @Override
-    public AuthUser getByEmail(String email) throws NoResultException {
+    public AuthUser getByEmail(String email) {
         if (email == null) {
             throw new IllegalArgumentException("Invalid email: null");
         }
         if (em.createQuery("SELECT tbl.id FROM AuthUser tbl WHERE tbl.email = "
                 + ":givenEmail", Long.class).setParameter("givenEmail", email).getResultList().size() < 1) {
-            throw new IllegalArgumentException("Invalid email: nonexistent");
+            return null;
         }
         return em.createQuery("SELECT tbl FROM AuthUser tbl "
                 + "WHERE tbl.email = :givenEmail", AuthUser.class).setParameter("givenEmail", email).getSingleResult();
@@ -78,48 +80,25 @@ public class AuthUserDaoImplJPA implements AuthUserDao {
     }
 
     @Override
-    public Long create(AuthUser user) {
-        if (user == null) {
-            throw new IllegalArgumentException("Invalid user: null");
+    public AuthUser getUserByIdInSocialNetwork(SocialNetwork socialNetwork, String idInSocialNetwork) {
+        if (socialNetwork == null) {
+            throw new IllegalArgumentException("Invalid socialNetwork: null");
         }
-        AuthUser createdUser = em.merge(user);
-        return createdUser.getId();
-    }
-
-    @Override
-    public AuthUser get(Long id) throws NoResultException {
-        if (id == null) {
-            throw new IllegalArgumentException("Invalid id: null");
+        if (idInSocialNetwork == null) {
+            throw new IllegalArgumentException("Invalid idInSocialNetwork: null");
         }
-        if (em.createQuery("SELECT tbl.id FROM AuthUser tbl WHERE tbl.id = "
-                + ":givenId", Long.class).setParameter("givenId", id).getResultList().size() < 1) {
-            throw new IllegalArgumentException("Invalid id: nonexistent");
+        if (em.createQuery("SELECT tbl.id FROM AuthUser tbl WHERE tbl.socialNetwork = :socialNetwork "
+                + "and tbl.idInSocialNetwork = :givenId", Long.class)
+                .setParameter("socialNetwork", socialNetwork)
+                .setParameter("givenId", idInSocialNetwork)
+                .getResultList().size() < 1) {
+            return null;
         }
         return em.createQuery("SELECT tbl FROM AuthUser tbl "
-                + "WHERE tbl.id = :givenId", AuthUser.class).setParameter("givenId", id).getSingleResult();
-    }
-
-    @Override
-    public void update(AuthUser user) {
-        if (user == null || user.getId() == null) {
-            throw new IllegalArgumentException("Invalid user: null or with no id.");
-        } else if (em.createQuery("SELECT tbl.id FROM AuthUser tbl WHERE tbl.id = "
-                + ":givenId", Long.class).setParameter("givenId", user.getId()).getResultList().size() < 1) {
-            throw new IllegalArgumentException("Invalid user: nonexistent");
-        }
-        em.merge(user);
-    }
-
-    @Override
-    public void remove(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("Invalid id: null");
-        }
-        AuthUser user = em.find(AuthUser.class, id);
-        if (user == null) {
-            log.error("Removing user with id " + id + " is already not in DB.");
-        }
-        em.remove(user);
+                + "WHERE  tbl.socialNetwork = :socialNetwork and tbl.idInSocialNetwork = :givenId", AuthUser.class)
+                .setParameter("socialNetwork", socialNetwork)
+                .setParameter("givenId", idInSocialNetwork)
+                .getSingleResult();
     }
 
 }

@@ -17,6 +17,8 @@
  */
 package cz.muni.fi.anatomytutor.backend.model;
 
+import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,16 +30,25 @@ import javax.persistence.ManyToOne;
  * @author Jan Kucera
  */
 @Entity
-public class TermInPicture {
+public class TermInPicture implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition = "serial")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @ManyToOne
     private Term term;
     @ManyToOne
     private Picture picture;
+    private Integer idInPicture;
+
+    public Integer getIdInPicture() {
+        return idInPicture;
+    }
+
+    public void setIdInPicture(Integer idInPicture) {
+        this.idInPicture = idInPicture;
+    }
 
     public Long getId() {
         return id;

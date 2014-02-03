@@ -2,6 +2,7 @@ package cz.muni.fi.anatomytutor.backend.service;
 
 import cz.muni.fi.anatomytutor.api.UserService;
 import cz.muni.fi.anatomytutor.api.dto.AuthUserDto;
+import cz.muni.fi.anatomytutor.api.dto.SocialNetwork;
 import cz.muni.fi.anatomytutor.backend.dao.AuthUserDao;
 import cz.muni.fi.anatomytutor.backend.model.AuthUser;
 import cz.muni.fi.anatomytutor.backend.service.convert.AuthUserConvert;
@@ -26,24 +27,40 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private AuthUserDao authUserDao;
 
+    /*
+     @Override
+     public Long register(AuthUserDto user) {
+     if (user == null) {
+     IllegalArgumentException iaex = new IllegalArgumentException("Invalid user in parameter: null");
+     log.error("UserServiceImpl.register() called on null parameter: AuthUserDto user", iaex);
+     throw iaex;
+     }
+     final AuthUserDto userDto = user;
+     AuthUser entity = AuthUserConvert.fromDtoToEntity(user);
+     Long entityId = null;
+     try {
+     entityId = authUserDao.create(entity);
+     } catch (Exception ex) {
+     throw new RecoverableDataAccessException("Operation 'register' failed." + ex.getMessage(), ex);
+     }
+     return entityId;
+     }
+     */
     @Override
-    public Long register(AuthUserDto user) {
-        if (user == null) {
-            IllegalArgumentException iaex = new IllegalArgumentException("Invalid user in parameter: null");
-            log.error("UserServiceImpl.register() called on null parameter: AuthUserDto user", iaex);
-            throw iaex;
+    public AuthUserDto getUserByIdInSocialNetwork(SocialNetwork socialNetwork, String idInSocialNetwork) {
+        if (socialNetwork == null) {
+            throw new IllegalArgumentException("socialNetwork is null");
         }
-        final AuthUserDto userDto = user;
-
-        AuthUser entity = AuthUserConvert.fromDtoToEntity(user);
-        Long entityId = null;
+        if (idInSocialNetwork == null) {
+            throw new IllegalArgumentException("IdInSocialNetwork is null");
+        }
         try {
-            entityId = authUserDao.create(entity);
+            AuthUser entity = authUserDao.getUserByIdInSocialNetwork(socialNetwork, idInSocialNetwork);
+            AuthUserDto dto = AuthUserConvert.fromEntityToDto(entity);
+            return dto;
         } catch (Exception ex) {
-            throw new RecoverableDataAccessException("Operation 'register' failed." + ex.getMessage(), ex);
+            throw new RecoverableDataAccessException("Operation 'getById' failed." + ex.getMessage(), ex);
         }
-        return entityId;
-
     }
 
     @Override
@@ -92,6 +109,25 @@ public class UserServiceImpl implements UserService {
             return dto;
         } catch (Exception ex) {
             throw new RecoverableDataAccessException("Operation 'getById' failed." + ex.getMessage(), ex);
+        }
+    }
+
+    @Override
+    public AuthUserDto getByEmail(String email) {
+        if (email == null) {
+            IllegalArgumentException iaex = new IllegalArgumentException("Invalid email in parameter: null");
+            log.error("UserServiceImpl.getByEmail() called on null parameter: String email", iaex);
+            throw iaex;
+        }
+        try {
+            AuthUser entity = authUserDao.getByEmail(email);
+            if (entity == null) {
+                return null;
+            }
+            AuthUserDto dto = AuthUserConvert.fromEntityToDto(entity);
+            return dto;
+        } catch (Exception ex) {
+            throw new RecoverableDataAccessException("Operation 'getByEmail' failed." + ex.getMessage(), ex);
         }
     }
 

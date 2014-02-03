@@ -2,14 +2,12 @@ package cz.muni.fi.anatomytutor.backend.service.convert;
 
 import cz.muni.fi.anatomytutor.api.dto.AuthUserDto;
 import cz.muni.fi.anatomytutor.backend.model.AuthUser;
-import org.springframework.stereotype.Component;
 
 /**
  * Conversion between AuthUser DTO and entity back and forth.
  *
- * @author Zdenek Lastuvka
+ * @author Jan Kucera
  */
-@Component
 public class AuthUserConvert {
 
     public static AuthUser fromDtoToEntity(AuthUserDto dto) {
